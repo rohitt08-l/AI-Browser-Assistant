@@ -2,49 +2,106 @@
 <html>
 <head>
   <title>AI Assistant</title>
+
   <style>
     body {
-      font-family: Arial;
-      width: 320px;
-      padding: 10px;
-      background: #f5f5f5;
+      font-family: 'Segoe UI', sans-serif;
+      width: 340px;
+      padding: 12px;
+      background: #0f172a; /* dark blue */
+      color: #e2e8f0;
     }
 
     h3 {
       text-align: center;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #6366f1, #22c55e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    select, textarea {
+      width: 100%;
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background: #1e293b;
+      color: white;
     }
 
     textarea {
-      width: 100%;
       height: 70px;
-      margin-top: 5px;
+      resize: none;
     }
 
-    select, button {
+    button {
       width: 100%;
-      margin-top: 5px;
-      padding: 5px;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
     }
 
-    #response {
-      margin-top: 10px;
-      background: white;
-      padding: 8px;
-      border-radius: 5px;
-      max-height: 200px;
-      overflow-y: auto;
+    #askBtn {
+      background: linear-gradient(90deg, #6366f1, #22c55e);
+      color: white;
+    }
+
+    #askBtn:hover {
+      opacity: 0.9;
     }
 
     .actions {
       display: flex;
-      gap: 5px;
-      margin-top: 5px;
+      gap: 6px;
+      margin-top: 8px;
     }
+
+    .actions button {
+      flex: 1;
+      background: #334155;
+      color: white;
+    }
+
+    .actions button:hover {
+      background: #475569;
+    }
+
+    #response {
+      margin-top: 10px;
+      background: #1e293b;
+      padding: 10px;
+      border-radius: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .loader {
+      text-align: center;
+      font-size: 12px;
+      color: #94a3b8;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { opacity: 0.3; }
+    }
+
   </style>
 </head>
+
 <body>
 
-<h3>AI Assistant 🚀</h3>
+<h3>AI Assistant</h3>
 
 <select id="taskType">
   <option value="auto">Auto Detect</option>
@@ -54,7 +111,7 @@
   <option value="generate_doc">Generate Document</option>
 </select>
 
-<textarea id="question" placeholder="Ask or give instruction..."></textarea>
+<textarea id="question" placeholder="Ask anything about this page..."></textarea>
 
 <button id="askBtn">Run AI</button>
 
