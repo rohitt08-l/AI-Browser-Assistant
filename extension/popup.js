@@ -1,15 +1,15 @@
 document.getElementById("askBtn").addEventListener("click", async () => {
   const question = document.getElementById("question").value;
+  const taskType = document.getElementById("taskType").value;
 
-  // Get active tab
+  document.getElementById("response").innerText = "Loading...";
+
   let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-  // Get page content
   chrome.tabs.sendMessage(tab.id, { action: "GET_PAGE_CONTENT" }, async (response) => {
-    
+
     const pageContent = response.content;
 
-    // Send to backend
     const res = await fetch("http://localhost:8000/ask", {
       method: "POST",
       headers: {
@@ -17,7 +17,8 @@ document.getElementById("askBtn").addEventListener("click", async () => {
       },
       body: JSON.stringify({
         question: question,
-        page_content: pageContent
+        page_content: pageContent,
+        task_type: taskType
       })
     });
 
@@ -25,4 +26,12 @@ document.getElementById("askBtn").addEventListener("click", async () => {
 
     document.getElementById("response").innerText = data.answer;
   });
+});
+
+
+// COPY BUTTON
+document.getElementById("copyBtn").addEventListener("click", () => {
+  const text = document.getElementById("response").innerText;
+  navigator.clipboard.writeText(text);
+  alert("Copied!");
 });

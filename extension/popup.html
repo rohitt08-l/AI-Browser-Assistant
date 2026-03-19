@@ -3,18 +3,64 @@
 <head>
   <title>AI Assistant</title>
   <style>
-    body { font-family: Arial; width: 300px; }
-    textarea { width: 100%; height: 60px; }
-    button { width: 100%; margin-top: 5px; }
-    #response { margin-top: 10px; }
+    body {
+      font-family: Arial;
+      width: 320px;
+      padding: 10px;
+      background: #f5f5f5;
+    }
+
+    h3 {
+      text-align: center;
+    }
+
+    textarea {
+      width: 100%;
+      height: 70px;
+      margin-top: 5px;
+    }
+
+    select, button {
+      width: 100%;
+      margin-top: 5px;
+      padding: 5px;
+    }
+
+    #response {
+      margin-top: 10px;
+      background: white;
+      padding: 8px;
+      border-radius: 5px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .actions {
+      display: flex;
+      gap: 5px;
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
 
-<h3>Ask about this page</h3>
+<h3>AI Assistant 🚀</h3>
 
-<textarea id="question" placeholder="Ask something..."></textarea>
-<button id="askBtn">Ask AI</button>
+<select id="taskType">
+  <option value="auto">Auto Detect</option>
+  <option value="qa">Q&A</option>
+  <option value="summarize">Summary</option>
+  <option value="notes">Notes</option>
+  <option value="generate_doc">Generate Document</option>
+</select>
+
+<textarea id="question" placeholder="Ask or give instruction..."></textarea>
+
+<button id="askBtn">Run AI</button>
+
+<div class="actions">
+  <button id="copyBtn">Copy</button>
+</div>
 
 <div id="response"></div>
 
