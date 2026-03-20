@@ -27,6 +27,7 @@ class RequestData(BaseModel):
 def groq_llm(prompt):
     response = client.chat.completions.create(
         model="llama-3.1-8b-instant",
+        temperature=0,   # 🔥 reduces hallucination
         messages=[{"role": "user", "content": prompt}]
     )
     return response.choices[0].message.content
@@ -48,7 +49,14 @@ def classify_task(question):
 # ---------------- TASK HANDLERS ----------------
 def handle_qa(context, question):
     return groq_llm(f"""
-    Answer clearly using context only.
+    You are a strict AI assistant.
+
+    RULES:
+    1. Answer ONLY from the given context
+    2. Do NOT use outside knowledge
+    3. If answer is not in context, say:
+    "I could not find this in the provided content"
+    4. Be concise and accurate
 
     Context:
     {context}
@@ -64,6 +72,7 @@ def handle_summary(context):
 
     {context}
     """)
+
 
 
 def handle_notes(context):
@@ -100,16 +109,23 @@ def ask(data: RequestData):
 
     # Split content
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=500,
-        chunk_overlap=100
+        chunk_size=300,
+        chunk_overlap=50
     )
     chunks = splitter.split_text(data.page_content[:10000])
 
     # Vector DB
     vectorstore = FAISS.from_texts(chunks, embedding_model)
 
-    docs = vectorstore.similarity_search(data.question, k=3)
-    context = "\n\n".join([doc.page_content for doc in docs])
+    docs_with_scores = vectorstore.similarity_search_with_score(data.question, k=5)
+
+    filtered_docs = [doc for doc, score in docs_with_scores if score < 2.0]
+
+    # 🔥 fallback if too strict
+    if not filtered_docs:
+        filtered_docs = [doc for doc, _ in docs_with_scores]
+
+    context = "\n\n".join([doc.page_content for doc in filtered_docs])
 
     # Task selection
     task = data.task_type.upper()
