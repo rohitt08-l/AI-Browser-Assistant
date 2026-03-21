@@ -4,7 +4,8 @@ from groq import Groq
 from langchain_text_splitters import RecursiveCharacterTextSplitter 
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-from docx import Document
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
 import os
 from dotenv import load_dotenv
 
@@ -91,14 +92,25 @@ def handle_doc(context):
     """)
 
 
-# ---------------- DOCX GENERATOR ----------------
-def create_docx(content):
-    doc = Document()
-    doc.add_heading('Generated Document', 0)
-    doc.add_paragraph(content)
+# ---------------- PDF GENERATOR ----------------
+def create_pdf(content):
+    file_path = "output.pdf"
 
-    file_path = "output.docx"
-    doc.save(file_path)
+    doc = SimpleDocTemplate(file_path)
+    styles = getSampleStyleSheet()
+
+    story = []
+
+    # Title
+    story.append(Paragraph("Generated Document", styles['Title']))
+    story.append(Spacer(1, 12))
+
+    # Content (split into paragraphs)
+    for line in content.split("\n"):
+        story.append(Paragraph(line, styles['Normal']))
+        story.append(Spacer(1, 8))
+
+    doc.build(story)
 
     return file_path
 
@@ -148,7 +160,7 @@ def ask(data: RequestData):
 
     elif task == "GENERATE_DOC":
         content = handle_doc(context)
-        file_path = create_docx(content)
+        file_path = create_pdf(content)
         return {"answer": content, "file": file_path}
 
     else:
