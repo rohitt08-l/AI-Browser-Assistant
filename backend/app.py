@@ -1,3 +1,4 @@
+from time import time
 from fastapi import FastAPI
 from pydantic import BaseModel
 from groq import Groq
@@ -9,6 +10,9 @@ from reportlab.lib.styles import getSampleStyleSheet
 import os
 from dotenv import load_dotenv
 
+OUTPUT_DIR = "output"
+if not os.path.exists(OUTPUT_DIR):
+    os.makedirs(OUTPUT_DIR)
 load_dotenv()
 
 api_key = os.getenv("GROQ_API_KEY")
@@ -94,7 +98,7 @@ def handle_doc(context):
 
 # ---------------- PDF GENERATOR ----------------
 def create_pdf(content):
-    file_path = "output.pdf"
+    file_path = os.path.join(OUTPUT_DIR, f"output_{int(time())}.pdf")
 
     doc = SimpleDocTemplate(file_path)
     styles = getSampleStyleSheet()
