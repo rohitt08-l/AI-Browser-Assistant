@@ -5,7 +5,7 @@ document.getElementById("askBtn").addEventListener("click", async () => {
   const responseDiv = document.getElementById("response");
 
   if (!question) {
-    responseDiv.innerText = "⚠️ Please enter a question";
+    responseDiv.innerText = "Please enter a question";
     return;
   }
 
@@ -33,7 +33,7 @@ document.getElementById("askBtn").addEventListener("click", async () => {
       responseDiv.innerText = data.answer;
 
     } catch (error) {
-      responseDiv.innerText = "❌ Error connecting to backend";
+      responseDiv.innerText = "Error connecting to backend";
     }
 
   });

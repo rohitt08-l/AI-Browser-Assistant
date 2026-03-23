@@ -32,7 +32,7 @@ class RequestData(BaseModel):
 def groq_llm(prompt):
     response = client.chat.completions.create(
         model="llama-3.1-8b-instant",
-        temperature=0,   # 🔥 reduces hallucination
+        temperature=0,   # reduces hallucination
         messages=[{"role": "user", "content": prompt}]
     )
     return response.choices[0].message.content
@@ -137,7 +137,7 @@ def ask(data: RequestData):
 
     filtered_docs = [doc for doc, score in docs_with_scores if score < 2.0]
 
-    # 🔥 fallback if too strict
+    #  fallback if too strict
     if not filtered_docs:
         filtered_docs = [doc for doc, _ in docs_with_scores]
 
