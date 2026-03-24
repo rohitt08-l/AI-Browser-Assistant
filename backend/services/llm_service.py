@@ -1,12 +1,20 @@
-from groq import Groq
-from backend.core.config import GROQ_API_KEY
+from openai import AzureOpenAI
+from backend.core.config import Config
 
-client = Groq(api_key=GROQ_API_KEY)
+client = AzureOpenAI(
+    api_key=Config.AZURE_OPENAI_API_KEY,
+    api_version=Config.AZURE_OPENAI_API_VERSION,
+    azure_endpoint=Config.AZURE_OPENAI_ENDPOINT
+)
 
-def groq_llm(prompt):
+def azure_llm(prompt):
     response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        temperature=0,
-        messages=[{"role": "user", "content": prompt}]
+        model=Config.OPENAI_MODEL_DEPLOYMENT_NAME,
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant"},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0.3
     )
+
     return response.choices[0].message.content

@@ -1,7 +1,6 @@
-from backend.services.llm_service import groq_llm
-
+from backend.services.llm_service import azure_llm
 def classify_task(question):
-    return groq_llm(f"""
+    return azure_llm(f"""
     Classify intent into:
     QA, SUMMARIZE, NOTES, GENERATE_DOC
 
@@ -11,7 +10,7 @@ def classify_task(question):
 
 
 def handle_qa(context, question):
-    return groq_llm(f"""
+    return azure_llm(f"""
     Answer only from context.
 
     Context:
@@ -23,12 +22,12 @@ def handle_qa(context, question):
 
 
 def handle_summary(context):
-    return groq_llm(f"Summarize:\n{context}")
+    return azure_llm(f"Summarize:\n{context}")
 
 
 def handle_notes(context):
-    return groq_llm(f"Create structured notes:\n{context}")
+    return azure_llm(f"Create structured notes:\n{context}")
 
 
 def handle_doc(context):
-    return groq_llm(f"Create document:\n{context}")
+    return azure_llm(f"Create document:\n{context}")
