@@ -1,41 +1,46 @@
-# AI Browser Assistant (Chrome Extension + RAG + Groq)
+# 🚀 AI Browser Assistant (Chrome Extension + RAG + Multi-LLM)
 
-## Overview
+## 📌 Overview
 
-AI Browser Assistant is a **context-aware Chrome extension** that allows users to interact with any webpage using AI.
+AI Browser Assistant is a **production-ready context-aware Chrome extension** that allows users to interact with any webpage using AI.
 
-It extracts webpage content in real-time and enables users to:
+It extracts webpage content in real time and enables users to:
 
-* Ask questions about the page
-* Summarize content
-* Extract key insights
+* ❓ Ask questions about the page
+* 📝 Summarize content instantly
+* 📚 Extract key insights and notes
+* 📄 Generate structured document-style outputs
 
-The system uses **Retrieval-Augmented Generation (RAG)** with **Groq LLM** for fast and accurate responses.
-
----
-
-## Features
-
-* Ask questions about any webpage
-* Summarize content instantly
-* Extract key points
-* Fast responses using Groq LLM
-* Works on any website
-* Context-aware answers (RAG-based)
+The system uses **Retrieval-Augmented Generation (RAG)** with **FAISS + HuggingFace embeddings**, and now supports **multi-LLM provider switching between Groq and Azure OpenAI** using a single `.env` variable.
 
 ---
 
-## Architecture
+## ✨ Features
+
+* 🌐 Ask questions about any webpage
+* 📝 Instant summarization
+* 📌 Extract key points
+* ⚡ Fast responses with Groq
+* 🏢 Enterprise-ready Azure OpenAI support
+* 🔄 Switch providers without code changes
+* 🧠 Context-aware RAG pipeline
+* 🧩 Clean FastAPI backend services
+* 🛡️ Environment-based secure config
+
+---
+
+## 🏗️ Architecture
 
 ```text
 Website → Chrome Extension → Backend (FastAPI)
-        → Text Processing → Embeddings → FAISS
-        → Groq LLM → Response → Extension UI
+        → Text Chunking → Embeddings → FAISS
+        → Provider Router (Groq / Azure)
+        → LLM Response → Extension UI
 ```
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 ### Frontend (Chrome Extension)
 
@@ -47,29 +52,36 @@ Website → Chrome Extension → Backend (FastAPI)
 
 * FastAPI
 * Uvicorn
+* Python Dotenv
 
-### AI/ML
+### AI / ML
 
-* Groq LLM (LLaMA 3.1)
+* Groq
+* Azure OpenAI
 * LangChain
-* FAISS (Vector Database)
-* HuggingFace Embeddings
+* FAISS
+* HuggingFace Sentence Transformers
 
 ---
 
 ## 📂 Project Structure
 
-```
-ai-browser-assistant/
+```bash
+AI-Browser-Assistant/
 │
 ├── extension/
 │   ├── manifest.json
 │   ├── popup.html
 │   ├── popup.js
-│   ├── content.js
+│   └── content.js
 │
 ├── backend/
-│   ├── app.py
+│   ├── core/
+│   │   └── config.py
+│   ├── services/
+│   │   ├── llm_service.py
+│   │   └── task_service.py
+│   └── main.py
 │
 ├── .env
 ├── requirements.txt
@@ -82,24 +94,50 @@ ai-browser-assistant/
 
 Create a `.env` file in the root directory:
 
+```env
+LLM_PROVIDER=groq
+
+# Groq
+GROQ_API_KEY=your_groq_api_key
+GROQ_MODEL=llama-3.3-70b-versatile
+
+# Azure OpenAI
+AZURE_OPENAI_API_KEY=your_azure_key
+AZURE_OPENAI_ENDPOINT=your_endpoint
+AZURE_OPENAI_API_VERSION=2024-02-01
+AZURE_DEPLOYMENT_NAME=gpt-4o
 ```
-GROQ_API_KEY=your_api_key_here
+
+### 🔄 Switch Providers
+
+Use either:
+
+```env
+LLM_PROVIDER=groq
 ```
+
+or
+
+```env
+LLM_PROVIDER=azure
+```
+
+No backend code changes required ✅
 
 ---
 
 ## 📦 Installation
 
-### 1. Clone Repository
+### 1️⃣ Clone Repository
 
-```
+```bash
 git clone https://github.com/rohitt08-l/AI-Browser-Assistant.git
-cd ai-browser-assistant
+cd AI-Browser-Assistant
 ```
 
-### 2. Install Dependencies
+### 2️⃣ Install Dependencies
 
-```
+```bash
 pip install -r requirements.txt
 ```
 
@@ -107,66 +145,89 @@ pip install -r requirements.txt
 
 ## ▶️ Run Backend
 
+```bash
+uvicorn backend.main:app --reload
 ```
-uvicorn backend.app:app --reload
+
+Backend runs at:
+
+```bash
+http://127.0.0.1:8000
 ```
 
 ---
 
-## Load Chrome Extension
+## 🧩 Load Chrome Extension
 
 1. Open Chrome
-2. Go to: `chrome://extensions/`
+2. Visit `chrome://extensions/`
 3. Enable **Developer Mode**
 4. Click **Load Unpacked**
 5. Select the `extension/` folder
 
 ---
 
-## Usage
+## 🚀 Usage
 
 1. Open any website
 2. Click the extension
-3. Ask questions like:
+3. Ask prompts like:
 
-   * "What is this page about?"
-   * "Summarize this page"
-   * "Give key points"
-
----
-
-## Future Improvements
-
-* 🔄 Caching for faster responses
-* 🧠 Chat history support
-* 🌐 Multi-page memory
-* 🎯 Highlight answers on webpage
-* 📊 Advanced retrieval (reranking)
+   * *What is this page about?*
+   * *Summarize this page*
+   * *Extract key points*
+   * *Generate notes from this page*
 
 ---
 
-## 🧠 Key Concepts Used
+## 🧠 Multi-LLM Design
 
-* Retrieval-Augmented Generation (RAG)
-* Vector Embeddings
-* Semantic Search
-* LLM-based Question Answering
+All backend services call only:
+
+```python
+call_llm(prompt)
+```
+
+Internally it routes to:
+
+* ⚡ **Groq** → ultra fast + low cost
+* 🏢 **Azure OpenAI** → enterprise-grade deployment
+
+This architecture is:
+
+* scalable
+* maintainable
+* testable
+* production-ready
+* interview-friendly
+
+---
+
+## 🔮 Future Improvements
+
+* 🔁 Automatic Groq → Azure fallback
+* 🧠 Chat history + memory
+* 🌐 Multi-page understanding
+* 🎯 Highlight answers directly on webpage
+* 📊 Advanced reranking retrieval
+* 🧩 Browser-side caching
+* 📱 Cross-browser support
 
 ---
 
 ## 🎯 Use Cases
 
 * Research assistance
-* Learning from blogs/articles
-* Quick summarization
-* Productivity enhancement
+* Blog/article learning
+* Fast summarization
+* Competitive exam study support
+* Developer documentation reading
+* Productivity workflows
 
 ---
 
-## 🧑‍💻 Author
+## 👨‍💻 Author
 
-Rohit Patil
-Machine Learning Engineer
+**Rohit Patil**
 
----
-
+ML Engineer
