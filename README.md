@@ -1,4 +1,4 @@
-# 🚀 AI Browser Assistant (Chrome Extension + RAG + Multi-LLM)
+#AI Browser Assistant (Chrome Extension + RAG + Multi-LLM)
 
 ## 📌 Overview
 
@@ -15,7 +15,7 @@ The system uses **Retrieval-Augmented Generation (RAG)** with **FAISS + HuggingF
 
 ---
 
-## ✨ Features
+##Features
 
 * 🌐 Ask questions about any webpage
 * 📝 Instant summarization
@@ -29,7 +29,7 @@ The system uses **Retrieval-Augmented Generation (RAG)** with **FAISS + HuggingF
 
 ---
 
-## 🏗️ Architecture
+##Architecture
 
 ```text
 Website → Chrome Extension → Backend (FastAPI)
@@ -40,7 +40,7 @@ Website → Chrome Extension → Backend (FastAPI)
 
 ---
 
-## 🛠️ Tech Stack
+##Tech Stack
 
 ### Frontend (Chrome Extension)
 
@@ -64,7 +64,7 @@ Website → Chrome Extension → Backend (FastAPI)
 
 ---
 
-## 📂 Project Structure
+##Project Structure
 
 ```bash
 AI-Browser-Assistant/
@@ -90,7 +90,7 @@ AI-Browser-Assistant/
 
 ---
 
-## 🔑 Environment Setup
+##Environment Setup
 
 Create a `.env` file in the root directory:
 
