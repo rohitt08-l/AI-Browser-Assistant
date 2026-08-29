@@ -6,10 +6,10 @@ AI Browser Assistant is a **production-ready context-aware Chrome extension** th
 
 It extracts webpage content in real time and enables users to:
 
-* ❓ Ask questions about the page
-* 📝 Summarize content instantly
-* 📚 Extract key insights and notes
-* 📄 Generate structured document-style outputs
+* Ask questions about the page
+* Summarize content instantly
+* Extract key insights and notes
+* Generate structured document-style outputs
 
 The system uses **Retrieval-Augmented Generation (RAG)** with **FAISS + HuggingFace embeddings**, and now supports **multi-LLM provider switching between Groq and Azure OpenAI** using a single `.env` variable.
 
