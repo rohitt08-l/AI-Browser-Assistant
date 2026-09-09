@@ -122,7 +122,7 @@ or
 LLM_PROVIDER=azure
 ```
 
-No backend code changes required ✅
+No backend code changes required 
 
 ---
 
