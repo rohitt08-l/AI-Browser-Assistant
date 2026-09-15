@@ -25,7 +25,6 @@ The system uses **Retrieval-Augmented Generation (RAG)** with **FAISS + HuggingF
 * 🔄 Switch providers without code changes
 * 🧠 Context-aware RAG pipeline
 * 🧩 Clean FastAPI backend services
-* 🛡️ Environment-based secure config
 
 ---
 
