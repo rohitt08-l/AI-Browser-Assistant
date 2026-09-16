@@ -107,7 +107,7 @@ AZURE_OPENAI_API_VERSION=2024-02-01
 AZURE_DEPLOYMENT_NAME=gpt-4o
 ```
 
-### 🔄 Switch Providers
+### Switch Providers
 
 Use either:
 
