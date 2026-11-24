@@ -1,0 +1,31 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# Deploys are triggered by the GitHub Actions pipeline (after tests pass),
+# not by Render's own auto-deploy, so a failing build never ships.
+services:
+  - type: web
+    name: ai-browser-assistant-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    branch: main
+    autoDeploy: false
+    healthCheckPath: /health
+    envVars:
+      - key: LLM_PROVIDER
+        value: groq
+      - key: GROQ_API_KEY
+        sync: false # set in the Render dashboard
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: LLM_FALLBACK_PROVIDER
+        sync: false # optional, e.g. azure
+      - key: AZURE_OPENAI_API_KEY
+        sync: false
+      - key: AZURE_OPENAI_ENDPOINT
+        sync: false
+      - key: AZURE_DEPLOYMENT_NAME
+        sync: false
+      - key: MAX_CONTEXT_TOKENS
+        value: "10000"
+      - key: CORS_ALLOW_ORIGIN_REGEX
+        sync: false # lock to ^chrome-extension://<your-extension-id>$ once published

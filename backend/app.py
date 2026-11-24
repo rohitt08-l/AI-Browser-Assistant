@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
@@ -54,7 +55,14 @@ def create_app(settings: Settings | None = None, llm: LLMService | None = None) 
 
     @app.get("/health", tags=["meta"])
     async def health() -> dict:
-        return {"status": "ok", "provider": settings.llm_provider, "fallback": settings.llm_fallback_provider}
+        return {
+            "status": "ok",
+            "version": app.version,
+            # Set by Render for git deploys, or by the Docker build (APP_COMMIT).
+            "commit": os.getenv("RENDER_GIT_COMMIT") or os.getenv("APP_COMMIT") or "unknown",
+            "provider": settings.llm_provider,
+            "fallback": settings.llm_fallback_provider,
+        }
 
     app.include_router(ask_router)
     app.include_router(files_router)
