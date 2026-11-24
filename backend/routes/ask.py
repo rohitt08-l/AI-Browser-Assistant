@@ -1,33 +1,66 @@
-from fastapi import APIRouter
-from backend.models.request_model import RequestData
-from backend.services.rag_service import get_context
-from backend.services.task_service import *
-from backend.services.pdf_service import create_pdf
+"""Ask endpoints: streaming (SSE) and plain JSON."""
 
-router = APIRouter()
+from __future__ import annotations
 
-@router.post("/ask")
-def ask(data: RequestData):
+import json
+import logging
+from collections.abc import AsyncIterator
 
-    context = get_context(data.page_content, data.question)
+from fastapi import APIRouter, Request
+from fastapi.responses import StreamingResponse
 
-    task = data.task_type.upper()
+from backend.core.errors import AppError
+from backend.models.schemas import AskRequest, AskResponse, TaskType
+from backend.services.assistant_service import AssistantService
 
-    if task == "AUTO":
-        task = classify_task(data.question)
+logger = logging.getLogger(__name__)
+router = APIRouter(tags=["assistant"])
 
-    if task == "QA":
-        return {"answer": handle_qa(context, data.question)}
 
-    elif task == "SUMMARIZE":
-        return {"answer": handle_summary(context)}
+def _service(request: Request) -> AssistantService:
+    return request.app.state.assistant
 
-    elif task == "NOTES":
-        return {"answer": handle_notes(context)}
 
-    elif task == "GENERATE_DOC":
-        content = handle_doc(context)
-        file_path = create_pdf(content)
-        return {"answer": content, "file": file_path}
+def _file_url(request: Request, file_id: str | None) -> str | None:
+    return str(request.url_for("download_file", file_id=file_id)) if file_id else None
 
-    return {"answer": "Invalid task"}
+
+@router.post("/ask", response_model=AskResponse)
+async def ask(data: AskRequest, request: Request) -> AskResponse:
+    """Non-streaming endpoint: returns the complete answer as JSON."""
+    task = data.task_type
+    parts: list[str] = []
+    file_id = None
+    async for event in _service(request).run(data):
+        if event["type"] == "meta":
+            task = TaskType(event["task"])
+        elif event["type"] == "token":
+            parts.append(event["content"])
+        elif event["type"] == "done":
+            file_id = event["file_id"]
+    return AskResponse(answer="".join(parts), task=task, file_url=_file_url(request, file_id))
+
+
+@router.post("/ask/stream")
+async def ask_stream(data: AskRequest, request: Request) -> StreamingResponse:
+    """Server-Sent Events stream of `meta`, `status`, `token`, `done` and `error` events."""
+    service = _service(request)
+    service.validate(data)  # fail with a proper HTTP status before the stream starts
+
+    async def events() -> AsyncIterator[str]:
+        try:
+            async for event in service.run(data):
+                if event["type"] == "done":
+                    event = {"type": "done", "file_url": _file_url(request, event["file_id"])}
+                yield f"data: {json.dumps(event)}\n\n"
+        except AppError as exc:
+            yield f"data: {json.dumps({'type': 'error', 'message': exc.message})}\n\n"
+        except Exception:  # never leak internals into the stream
+            logger.exception("Unexpected error while streaming")
+            yield f"data: {json.dumps({'type': 'error', 'message': 'Unexpected server error.'})}\n\n"
+
+    return StreamingResponse(
+        events(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
