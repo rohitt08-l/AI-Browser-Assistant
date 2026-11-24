@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------
 // Config & state
 // ---------------------------------------------------------------------------
-const DEFAULT_BACKEND = "http://localhost:8000";
+// DEFAULT_BACKEND comes from config.js
 const HISTORY_LIMIT = 10; // past messages sent to the backend for follow-ups
 const MAX_HISTORY_CHARS = 20000;
 const TASK_LABELS = {
