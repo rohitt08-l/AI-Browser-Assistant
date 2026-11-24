@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Web Assistant</title>
+  <link rel="stylesheet" href="sidepanel.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">AI Web Assistant</div>
+    <div class="topbar-actions">
+      <button id="newChatBtn" class="icon-btn" title="New chat" aria-label="New chat">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+      <button id="settingsBtn" class="icon-btn" title="Settings" aria-label="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div id="pageBar" class="page-bar" title="">
+    <img id="pageIcon" alt="" />
+    <span id="pageTitle">No page</span>
+  </div>
+
+  <section id="settingsPanel" class="settings" hidden>
+    <label for="backendUrl">Backend URL</label>
+    <input id="backendUrl" type="url" placeholder="http://localhost:8000" spellcheck="false" />
+    <div class="settings-row">
+      <button id="testBtn" class="secondary">Test connection</button>
+      <button id="saveSettingsBtn" class="primary">Save</button>
+    </div>
+    <p id="settingsStatus" class="hint" role="status"></p>
+  </section>
+
+  <main id="chat" class="chat" aria-live="polite">
+    <div id="emptyState" class="empty">
+      <h2>Ask anything about this page</h2>
+      <p>Answers are based on the page you're viewing. Highlight text first to ask about a specific passage.</p>
+    </div>
+  </main>
+
+  <div id="banner" class="banner" hidden role="alert"></div>
+
+  <footer class="composer">
+    <div class="chips">
+      <button class="chip" data-task="summarize">Summarize</button>
+      <button class="chip" data-task="notes">Key notes</button>
+      <button class="chip" data-task="generate_doc">Make PDF</button>
+    </div>
+    <div class="input-wrap">
+      <textarea id="question" rows="1" placeholder="Ask about this page..." aria-label="Your question"></textarea>
+      <button id="sendBtn" class="send" title="Send (Enter)" aria-label="Send">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <button id="stopBtn" class="send stop" title="Stop" aria-label="Stop" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg>
+      </button>
+    </div>
+    <div class="composer-meta">
+      <select id="taskType" aria-label="Mode">
+        <option value="auto">Auto</option>
+        <option value="qa">Q&amp;A</option>
+        <option value="summarize">Summary</option>
+        <option value="notes">Notes</option>
+        <option value="generate_doc">Document (PDF)</option>
+      </select>
+      <span class="hint">Enter to send · Shift+Enter for new line</span>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="lib/marked.umd.js"></script>
+  <script src="lib/purify.min.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>
