@@ -53,6 +53,16 @@ def create_app(settings: Settings | None = None, llm: LLMService | None = None) 
     async def _app_error(_: Request, exc: AppError) -> JSONResponse:
         return JSONResponse(status_code=exc.status_code, content={"detail": exc.message})
 
+    @app.get("/", tags=["meta"])
+    async def root() -> dict:
+        return {
+            "service": "AI Browser Assistant API",
+            "status": "ok",
+            "docs": "/docs",
+            "health": "/health",
+            "endpoints": ["POST /ask", "POST /ask/stream", "GET /files/{id}"],
+        }
+
     @app.get("/health", tags=["meta"])
     async def health() -> dict:
         return {
