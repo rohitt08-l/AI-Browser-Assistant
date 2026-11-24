@@ -37,8 +37,13 @@ def test_rules(question, expected):
 
 @pytest.mark.parametrize(
     "reply,expected",
-    [("QA.", TaskType.QA), ("summarize", TaskType.SUMMARIZE), ("Generate_Doc", TaskType.GENERATE_DOC),
-     ("notes", TaskType.NOTES), ("banana", TaskType.QA)],
+    [
+        ("QA.", TaskType.QA),
+        ("summarize", TaskType.SUMMARIZE),
+        ("Generate_Doc", TaskType.GENERATE_DOC),
+        ("notes", TaskType.NOTES),
+        ("banana", TaskType.QA),
+    ],
 )
 def test_parse_label(reply, expected):
     assert parse_label(reply) == expected

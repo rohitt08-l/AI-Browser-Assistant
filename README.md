@@ -161,10 +161,17 @@ Request body:
 
 ---
 
+## Deployment & CI/CD
+
+Merging to `main` automatically tests the code, deploys the backend to Render, and publishes the extension zip as a GitHub Release. See [DEPLOYMENT.md](DEPLOYMENT.md) for the one-time setup.
+
+---
+
 ## Tests
 
 ```bash
 pip install -r requirements-dev.txt
+ruff check backend tests
 pytest
 ```
 
@@ -175,7 +182,7 @@ The tests use a fake LLM, so they need no API keys or network access.
 ## Roadmap
 
 * **Phase 2 (security):** auth / BYOK, rate limiting and quotas, privacy policy
-* **Phase 3 (quality and operations):** eval set, Sentry, LLM tracing, Docker + CI, Redis cache
+* **Phase 3 (quality and operations):** eval set, Sentry, LLM tracing, Redis cache
 * **AI features:** cited answers that jump to the passage, multi-tab chat, YouTube and PDF support, selection actions, agentic page actions
 
 ---

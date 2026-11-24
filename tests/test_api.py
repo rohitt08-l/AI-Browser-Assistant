@@ -16,6 +16,11 @@ def test_health(client):
     assert client.get("/health").json()["status"] == "ok"
 
 
+def test_root_describes_service(client):
+    body = client.get("/").json()
+    assert body["status"] == "ok" and body["docs"] == "/docs"
+
+
 def test_ask_qa_sends_full_page(client, fake_llm):
     r = client.post("/ask", json={"question": "What does it convert?", "page_content": PAGE, "task_type": "QA"})
     assert r.status_code == 200
