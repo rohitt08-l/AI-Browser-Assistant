@@ -28,9 +28,7 @@ class EmbeddingsService:
             )
             self._model = settings.azure_embeddings_deployment
         elif settings.embeddings_provider == "openai":
-            self._client = AsyncOpenAI(
-                api_key=settings.openai_api_key, base_url=settings.openai_base_url, **common
-            )
+            self._client = AsyncOpenAI(api_key=settings.openai_api_key, base_url=settings.openai_base_url, **common)
             self._model = settings.openai_embeddings_model
         else:
             raise ValueError("EmbeddingsService requires EMBEDDINGS_PROVIDER=azure|openai")
@@ -39,9 +37,7 @@ class EmbeddingsService:
         vectors: list[list[float]] = []
         try:
             for start in range(0, len(texts), _BATCH):
-                response = await self._client.embeddings.create(
-                    model=self._model, input=texts[start : start + _BATCH]
-                )
+                response = await self._client.embeddings.create(model=self._model, input=texts[start : start + _BATCH])
                 vectors.extend(item.embedding for item in response.data)
         except OpenAIError as exc:
             raise LLMError("The embeddings provider returned an error.") from exc

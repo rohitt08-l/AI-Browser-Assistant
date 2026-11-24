@@ -1,12 +1,12 @@
 """Request / response schemas for the public API."""
 
-from enum import Enum
+from enum import StrEnum
 from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 
-class TaskType(str, Enum):
+class TaskType(StrEnum):
     AUTO = "auto"
     QA = "qa"
     SUMMARIZE = "summarize"

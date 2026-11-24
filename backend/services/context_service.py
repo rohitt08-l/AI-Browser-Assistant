@@ -72,7 +72,7 @@ def split_text(text: str, chunk_size: int, overlap: int) -> list[str]:
         return chunks
     # Prepend the tail of the previous chunk so ideas spanning a boundary survive.
     with_overlap = [chunks[0]]
-    for prev, cur in zip(chunks, chunks[1:]):
+    for prev, cur in zip(chunks, chunks[1:], strict=False):
         tail = prev[-overlap:]
         cut = tail.find(" ")
         tail = tail[cut + 1 :] if cut != -1 else tail

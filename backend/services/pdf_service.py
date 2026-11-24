@@ -90,7 +90,12 @@ def markdown_to_pdf(markdown: str, fallback_title: str = "Generated Document") -
 
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(
-        buffer, pagesize=A4, leftMargin=2 * cm, rightMargin=2 * cm, topMargin=2 * cm, bottomMargin=2 * cm,
+        buffer,
+        pagesize=A4,
+        leftMargin=2 * cm,
+        rightMargin=2 * cm,
+        topMargin=2 * cm,
+        bottomMargin=2 * cm,
         title=fallback_title,
     )
     doc.build(story)
