@@ -1,10 +1,9 @@
-fastapi
-uvicorn
-python-dotenv
-openai
-langchain
-langchain-community
-faiss-cpu
-tiktoken
-langchain-huggingface
-sentence-transformers
+# Runtime dependencies (pinned for reproducible deploys).
+# No PyTorch / FAISS / LangChain: embeddings, if enabled, come from an API.
+fastapi==0.165.0
+uvicorn[standard]==0.54.0
+pydantic==2.14.4
+pydantic-settings==2.16.3
+openai==3.58.0
+numpy==2.5.5
+reportlab==5.1.1
